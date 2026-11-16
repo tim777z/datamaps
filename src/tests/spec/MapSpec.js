@@ -4,7 +4,12 @@ describe("Map", function() {
   };
 
   beforeEach(function() {
-    map = makeMap( $("#container1") );
+    // Setup a mock DOM element for the map container
+    const container = document.createElement('div');
+    container.id = 'container1';
+    document.body.appendChild(container);
+
+    map = makeMap( $( $("#container1") ) );
     
     $("#container1").on("map-click", function() {
       mockEvents.run();
@@ -22,13 +27,24 @@ describe("Map", function() {
     spyOn(mockEvents, 'run');
   });
 
+  afterEach(function() {
+    if (map && map.remove) {
+      map.remove();
+    }
+    // Clean up the container
+    if ($("#container1").length) {
+      $("#container1").remove();
+    }
+    mockEvents.run.mockClear();
+  });
+
   it("should have a function named render", function() {
-    map = makeMap( $("#container1") );
+    map = makeMap( $( $("#container1") ) );
     expect(map.render).not.toBeUndefined();
   });
 
   describe("Events", function() {
-   beforeEach(function() {
+    beforeEach(function() {
       map.render();
     });
 
@@ -83,4 +99,11 @@ describe("Map", function() {
       expect( $("path").length ).toBeGreaterThan(35);
     });
   });
+
+  function makeMap( $container ) {
+    return new Datamap({
+      element: $container[0],
+      scope: 'world'
+    });
+  }
 });

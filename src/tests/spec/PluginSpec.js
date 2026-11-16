@@ -1,14 +1,28 @@
 describe("Plugin", function() {
+  var $el;
 
-  var $el = $("#container1");
-   
+  beforeEach(function() {
+    // Create a mock DOM element for the map container
+    const container = document.createElement('div');
+    container.id = 'container1';
+    document.body.appendChild(container);
+
+    $el = $( "#container1" );
+  });
+
+  afterEach(function() {
+    if ($el && $el.length) {
+      $el.remove();
+    }
+  });
+
   it("should add a 'datamaps' function to $.prototype", function() {
-    expect($.fn.datamap).toBeDefined();
+    expect($.fn.datamaps).toBeDefined();
   });
 
   describe("Rendering elements", function() {
     beforeEach(function() {
-      $el.datamap();
+      $el.datamaps();
     });
 
     afterEach(function() {
