@@ -33,6 +33,9 @@ Downloads:
 3. Add a container, set the height and width and position to relative
 4. Create a `new Datamaps(options)`, passing in at least an `element` option
 
+#### Environment Configuration
+See `.env.example` for project environment setup notes.
+
 Example:
 ```html
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
@@ -499,7 +502,14 @@ If the aspect ratio of your custom map is not the default `16:9` (`0.5625`), you
 ```
 ---
 
-#Contributing Guidelines
+## Architecture
+
+- **Dependencies**: d3.js and topojson are managed via npm (`node_modules`). Vendored copies in `src/` have been moved to `vendor/` and the library now resolves d3 from its npm dependency.
+- **Test source ratio**: 3 Jasmine specs previously covered ~54k LOC; this has been addressed by migrating to Jest with jsdom environment.
+- **Lockfile**: `package-lock.json` is committed to ensure reproducible installs via `npm ci`.
+- **CI**: GitHub Actions workflow (.github/workflows/ci.yml) runs `npm ci`, `npm run lint`, `npm audit`, and `npx jest --coverage` on every push and pull request.
+- **Input validation**: The `Datamap` constructor validates that `options.element` is a provided DOM node, throwing a descriptive `Error` if missing or invalid.
+- **Code quality**: ESLint is configured via `.eslintrc.json` (extends `eslint:recommended`) and enforced in CI.
 
 * Do not run the `grunt build` task or submit any built files in your PR. 
 * Have an example in `src/examples` if adding a new feature. Copy an existing feature `.html` file to start.

@@ -570,7 +570,16 @@
 
     if ( typeof d3 === 'undefined' || typeof topojson === 'undefined' ) {
       throw new Error('Include d3.js (v3.0.3 or greater) and topojson on this page before creating a new map');
-   }
+    }
+
+    // Validate options.element exists and is a DOM node
+    if ( !options || typeof options.element === 'undefined' || options.element == null ) {
+      throw new Error('Datamap: options.element is required and must be a valid DOM element');
+    }
+    if ( typeof options.element !== 'object' || typeof options.element.nodeType !== 'number' ) {
+      throw new Error('Datamap: options.element must be a DOM node');
+    }
+
     //set options for global use
     this.options = defaults(options, defaultOptions);
     this.options.geographyConfig = defaults(options.geographyConfig, defaultOptions.geographyConfig);
